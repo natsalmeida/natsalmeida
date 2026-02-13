@@ -1,0 +1,987 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academic Portfolio</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Source+Sans+3:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0f1a;
+      --surface: #141c2e;
+      --text-primary: #e8edf5;
+      --accent-primary: #64b5f6;
+      --accent-secondary: #81c784;
+    }
+    
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+    
+    .font-display {
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .slide {
+      min-height: 100%;
+      padding: 3rem 2rem;
+      display: none;
+      animation: fadeIn 0.5s ease-out;
+    }
+    
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    
+    .animate-left {
+      animation: slideInLeft 0.6s ease-out 0.2s both;
+    }
+    
+    .animate-right {
+      animation: slideInRight 0.6s ease-out 0.3s both;
+    }
+    
+    .animate-scale {
+      animation: scaleIn 0.8s ease-out both;
+    }
+    
+    .image-placeholder {
+      background: linear-gradient(135deg, #1e2a42 0%, #2a3a5c 100%);
+      border: 2px dashed #3a4a6c;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+      transition: all 0.3s ease;
+    }
+    
+    .image-placeholder:hover {
+      border-color: var(--accent-primary);
+      background: linear-gradient(135deg, #1e2a42 0%, #2a4a6c 100%);
+    }
+    
+    .card {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid rgba(100, 181, 246, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+      border-color: rgba(100, 181, 246, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .progress-bar {
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      transition: width 0.3s ease;
+    }
+    
+    .nav-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-dot.active {
+      background: var(--accent-primary);
+      transform: scale(1.2);
+    }
+    
+    .nav-dot:hover:not(.active) {
+      background: rgba(255,255,255,0.4);
+    }
+    
+    .tag {
+      background: rgba(100, 181, 246, 0.15);
+      color: var(--accent-primary);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    
+    .tag-green {
+      background: rgba(129, 199, 132, 0.15);
+      color: var(--accent-secondary);
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-primary), #42a5f5);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(100, 181, 246, 0.3);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--text-primary);
+    }
+    
+    .btn-outline:hover {
+      border-color: var(--accent-primary);
+      background: rgba(100, 181, 246, 0.1);
+    }
+    
+    .timeline-item {
+      position: relative;
+      padding-left: 2rem;
+      border-left: 2px solid rgba(100, 181, 246, 0.3);
+    }
+    
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -6px;
+      top: 0;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+    }
+    
+    .scroll-container {
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .cover-backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(100, 181, 246, 0.1) 0%, rgba(129, 199, 132, 0.05) 100%);
+      z-index: 0;
+    }
+
+    .cover-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .skill-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 1.25rem;
+      border: 1px solid rgba(100, 181, 246, 0.1);
+    }
+
+    .skill-card h4 {
+      color: var(--accent-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .skill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .skill-badge {
+      background: rgba(100, 181, 246, 0.1);
+      border: 1px solid rgba(100, 181, 246, 0.3);
+      color: var(--accent-primary);
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full flex flex-col"><nav class="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-between items-center" style="background: linear-gradient(180deg, rgba(10,15,26,0.95) 0%, rgba(10,15,26,0) 100%);">
+    <div class="flex items-center gap-3">
+     <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));">
+      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+      </svg>
+     </div><span id="nav-title" class="font-display font-semibold text-lg">Portfolio</span>
+    </div>
+    <div class="flex items-center gap-2"><span id="slide-counter" class="text-sm opacity-60 mr-4">1 / 15</span>
+     <div id="nav-dots" class="flex gap-2"></div>
+    </div>
+   </nav><div class="fixed top-0 left-0 right-0 z-50">
+    <div class="progress-bar">
+     <div id="progress-fill" class="progress-fill" style="width: 6.67%;"></div>
+    </div>
+   </div>
+   <main class="scroll-container pt-16"><section id="slide-0" class="slide active">
+     <div class="cover-backdrop"></div>
+     <div class="cover-content max-w-6xl mx-auto w-full flex-1 flex flex-col items-center justify-center text-center">
+      <div class="animate-left mb-12">
+       <div class="flex justify-center gap-2 mb-6"><span class="tag">Welcome</span>
+       </div>
+      </div>
+      <div class="animate-scale mb-8">
+       <h1 id="portfolio-title" class="font-display text-6xl lg:text-7xl font-bold mb-4 leading-tight"><span class="gradient-text">Portfolio</span></h1>
+      </div>
+      <div class="animate-right mb-12">
+       <p id="portfolio-subtitle" class="font-display text-3xl lg:text-4xl opacity-90 font-light">Nathalie Soares</p>
+       <div class="h-1 w-24 mx-auto mt-4" style="background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); border-radius: 1px;"></div>
+      </div>
+      <div class="animate-left mt-12">
+           <p class="text-lg opacity-70 mb-8 max-w-xl mx-auto leading-relaxed">Undergraduate Student &amp; Research Assistant<br><span class="opacity-50">Software Analysis and Development</span></p>
+           <button onclick="goToSlide(1)" class="btn btn-primary inline-flex items-center gap-2"> Begin Journey 
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+           </button>
+          </div>
+         </div>
+        </section> <section id="slide-1" class="slide">
+         <div class="max-w-6xl mx-auto w-full flex-1 flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+          <div class="flex-1 animate-left">
+           <div class="flex gap-2 mb-4"><span class="tag">Research</span> <span class="tag tag-green">Academic</span>
+           </div>
+           <h1 id="main-title" class="font-display text-4xl lg:text-5xl font-bold mb-4 leading-tight">Academic Journey &amp; <span class="gradient-text">Research</span></h1>
+           <p id="main-subtitle" class="text-lg opacity-80 leading-relaxed mb-6">This portfolio showcases my academic and research trajectory, highlighting projects developed during research assistantships, interdisciplinary collaborations, and my current journey in Software Analysis and Development.</p>
+           <p class="text-base opacity-70 leading-relaxed mb-8">Parallel to my formal education, I have dedicated myself to independent studies in Data Science, mastering tools like Python, SQL, and Business Intelligence to bridge the gap between technical development and social application.</p>
+           <div class="flex gap-3">
+            <button onclick="goToSlide(2)" class="btn btn-primary">Explore Projects</button>
+           </div>
+          </div>
+          <div class="flex-1 w-full animate-right">
+           <div class="aspect-video lg:aspect-square max-w-md mx-auto rounded-[12px] border-2 border-[#3a4a6c] hover:border-[#64b5f6] transition-all duration-300 overflow-hidden shadow-xl">
+            <img src="Foto portfolio.png" alt="Profile Photo" class="w-full h-full object-cover">
+           </div>
+          </div>
+         </div>
+        </section> <section id="slide-2" class="slide">    
+     <div class="max-w-6xl mx-auto w-full">
+      <div class="text-center mb-10 animate-left"><span class="tag mb-4 inline-block">Overview</span>
+       <h2 class="font-display text-3xl lg:text-4xl font-bold">Research Focus Areas</h2>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+       <div class="card animate-left">
+        <div class="flex items-start gap-4 mb-4">
+         <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background: rgba(100, 181, 246, 0.15);">
+          <svg class="w-6 h-6" style="color: var(--accent-primary);" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+         </div>
+         <div><span class="tag text-xs mb-2 inline-block">Focus: Participatory Diagnostics and social impact</span>
+          <h3 class="font-display text-xl font-semibold">1. Social Data Analytics</h3>
+         </div>
+        </div>
+        <p class="opacity-80 mb-4 leading-relaxed">Utilizing statistical tools and Business Intelligence (Power BI) to interpret community concerns and support evidence-based local policies.</p>
+        <div class="pt-4 border-t border-white/10">
+         <p class="text-sm font-medium mb-2" style="color: var(--accent-secondary);">Impact:</p>
+         <p class="text-sm opacity-70">Delivered interactive dashboards and comprehensive social diagnostic reports that translate raw community data into actionable recommendations for public policy.</p>
+        </div>
+       </div>
+       <div class="card animate-right">
+        <div class="flex items-start gap-4 mb-4">
+         <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background: rgba(129, 199, 132, 0.15);">
+          <svg class="w-6 h-6" style="color: var(--accent-secondary);" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+          </svg>
+         </div>
+         <div><span class="tag tag-green text-xs mb-2 inline-block">Focus: Ethical software development</span>
+          <h3 class="font-display text-xl font-semibold">2. Responsible Tech &amp; Interaction Design</h3>
+         </div>
+        </div>
+        <p class="opacity-80 mb-4 leading-relaxed">Developing healthcare management systems integrating Human-Computer Interaction (HCI) principles, WCAG accessibility, and strict LGPD (Data Protection) compliance.</p>
+        <div class="pt-4 border-t border-white/10">
+         <p class="text-sm font-medium mb-2" style="color: var(--accent-secondary);">Impact:</p>
+         <p class="text-sm opacity-70">Creating high-fidelity prototypes (Figma) and functional code (Java/HTML) that prioritize user transparency and dignity.</p>
+        </div>
+       </div>
+      </div>
+      <div class="flex justify-center mt-8 gap-4"><button onclick="goToSlide(3)" class="btn btn-primary">View Projects →</button>
+      </div>
+     </div>
+    </section><section id="slide-3" class="slide">
+     <div class="max-w-6xl mx-auto w-full flex-1 flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+      <div class="flex-1 animate-left">
+       <div class="flex gap-2 mb-4"><span class="tag">2025 - Present</span> <span class="tag tag-green">Active Project</span>
+       </div>
+       <h2 class="font-display text-3xl lg:text-4xl font-bold mb-4">Community <span class="gradient-text">Data Lab</span></h2>
+       <p class="text-lg opacity-80 leading-relaxed mb-6">The Community Data Lab is a collaborative space designed to analyze public and community data in Ponte Alta do Tocantins.</p>
+       <p class="opacity-70 leading-relaxed mb-6">The project transforms raw public transparency data and community feedback into visual tools that support public management and social control.</p>
+       <div class="flex flex-wrap gap-2 mb-6"><span class="px-3 py-1 rounded-full text-xs font-medium" style="background: rgba(100, 181, 246, 0.1); border: 1px solid rgba(100, 181, 246, 0.3);">Power BI</span> <span class="px-3 py-1 rounded-full text-xs font-medium" style="background: rgba(100, 181, 246, 0.1); border: 1px solid rgba(100, 181, 246, 0.3);">Python</span> <span class="px-3 py-1 rounded-full text-xs font-medium" style="background: rgba(100, 181, 246, 0.1); border: 1px solid rgba(100, 181, 246, 0.3);">SQL</span> <span class="px-3 py-1 rounded-full text-xs font-medium" style="background: rgba(100, 181, 246, 0.1); border: 1px solid rgba(100, 181, 246, 0.3);">DAX</span>
+       </div><button onclick="goToSlide(4)" class="btn btn-primary">See My Role →</button>
+      </div>
+      <div class="flex-1 w-full animate-right">
+       <div class="aspect-video max-w-lg mx-auto rounded-[12px] border-2 border-[#3a4a6c] hover:border-[#64b5f6] transition-all duration-300 overflow-hidden shadow-xl">
+        <img src="Data lab.png" alt="Community Data Lab" class="w-full h-full object-cover">
+       </div>
+      </div>
+     </div>
+    </section><section id="slide-4" class="slide">
+     <div class="max-w-6xl mx-auto w-full flex-1 flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+      <div class="flex-1 w-full lg:order-2 animate-right">
+       <div class="aspect-video max-w-lg mx-auto rounded-[12px] border-2 border-[#3a4a6c] hover:border-[#64b5f6] transition-all duration-300 overflow-hidden shadow-xl bg-white">
+        <img src="Data.png" alt="Data Engineering" class="w-full h-full object-contain">
+       </div>
+      </div>
+      <div class="flex-1 lg:order-1 animate-left"><span class="tag mb-4 inline-block">Community Data Lab</span>
+       <h2 class="font-display text-3xl lg:text-4xl font-bold mb-6">My Role: <span class="gradient-text">Research Assistant &amp; Data Analyst</span></h2>
+       <div class="space-y-4">
+        <div class="timeline-item pb-4">
+         <h4 class="font-semibold mb-1" style="color: var(--accent-primary);">Data Engineering</h4>
+         <p class="text-sm opacity-80">Performed extensive cleaning, structuring, and processing of public procurement data (2016–2025) using SQL and Python.</p>
+        </div>
+        <div class="timeline-item pb-4">
+         <h4 class="font-semibold mb-1" style="color: var(--accent-primary);">Participatory Research</h4>
+         <p class="text-sm opacity-80">Conducted field surveys with 131 community members to identify priority local demands and social perceptions.</p>
+        </div>
+        <div class="timeline-item pb-4">
+         <h4 class="font-semibold mb-1" style="color: var(--accent-primary);">BI Development</h4>
+         <p class="text-sm opacity-80">Built three interactive Power BI dashboards, utilizing DAX for advanced calculations and metrics.</p>
+        </div>
+        <div class="timeline-item">
+         <h4 class="font-semibold mb-1" style="color: var(--accent-primary);">User Experience</h4>
+         <p class="text-sm opacity-80">Integrated floating filter menus and custom backgrounds to optimize navigation and engagement.</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><section id="slide-5" class="slide">
+     <div class="max-w-6xl mx-auto w-full">
+      <div class="text-center mb-10 animate-left"><span class="tag mb-4 inline-block">Community Data Lab</span>
+       <h2 class="font-display text-3xl lg:text-4xl font-bold">Challenge &amp; <span class="gradient-text">Key Results</span></h2>
+      </div>
+      <div class="grid lg:grid-cols-2 gap-8">
+       <div class="card animate-left">
+        <div class="flex items-center gap-3 mb-4">
+         <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: rgba(239, 83, 80, 0.15);">
+          <svg class="w-5 h-5" style="color: #ef5350;" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+          </svg>
+         </div>
+         <h3 class="font-display text-xl font-semibold">The Challenge</h3>
+        </div>
+        <p class="opacity-80 leading-relaxed">Public data is often inconsistent or incomplete, particularly historical records between 2016 and 2021. Our challenge was to manually categorize generic contract data and bridge the gap between financial transparency and actual community needs.</p>
+       </div>
+       <div class="card animate-right">
+        <div class="flex items-center gap-3 mb-4">
+         <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: rgba(129, 199, 132, 0.15);">
+          <svg class="w-5 h-5" style="color: var(--accent-secondary);" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+         </div>
+         <h3 class="font-display text-xl font-semibold">Key Results</h3>
+        </div>
+        <div class="space-y-3">
+         <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style="background: var(--accent-primary); color: white; font-size: 0.75rem; font-weight: 600;">
+           1
+          </div>
+          <div>
+           <p class="font-medium text-sm">Interactive Dashboards</p>
+           <p class="text-xs opacity-70">Three tools: Community Perceptions, Financial Transparency, and Alignment &amp; Impact.</p>
+          </div>
+         </div>
+         <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style="background: var(--accent-primary); color: white; font-size: 0.75rem; font-weight: 600;">
+           2
+          </div>
+          <div>
+           <p class="font-medium text-sm">Community Engagement</p>
+           <p class="text-xs opacity-70">Strengthened university-community link through direct participatory data collection.</p>
+          </div>
+         </div>
+         <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style="background: var(--accent-primary); color: white; font-size: 0.75rem; font-weight: 600;">
+           3
+          </div>
+          <div>
+           <p class="font-medium text-sm">Evidence-Based Insights</p>
+           <p class="text-xs opacity-70">Created data narrative showing where public money is spent vs. community priorities.</p>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     <div class="flex justify-center mt-8 gap-4">
+        <button onclick="goToSlide(6)" class="btn btn-primary">View Results →</button>
+      </div>
+     </div>
+    </section> <section id="slide-6" class="slide">
+     <div class="max-w-6xl mx-auto w-full flex-1 flex flex-col items-center justify-center">
+      <div class="text-center mb-8 animate-left"><span class="tag mb-4 inline-block">Community Data Lab</span>
+       <h2 class="font-display text-3xl lg:text-4xl font-bold"><span class="gradient-text">Results</span></h2>
+      </div>
+      <div class="w-full animate-right">
+       <div class="aspect-video max-w-4xl mx-auto rounded-[12px] border-2 border-[#3a4a6c] hover:border-[#64b5f6] transition-all duration-300 overflow-hidden shadow-2xl">
+        <img src="Resultados 1.png" alt="Dashboard Results" class="w-full h-full object-cover">
+       </div>
+      </div>
+      <div class="flex flex-col sm:flex-row justify-center mt-8 gap-4">
+       <a href="https://app.powerbi.com/view?r=eyJrIjoiN2ZjMjNmOTAtZDEyMy00MTJlLThkNzgtNzhiNWQ0ZWQ5NDZkIiwidCI6IjY1OWNlMmI4LTA3MTQtNDE5OC04YzM4LWRjOWI2MGFhYmI1NyJ9" target="_blank" class="btn btn-outline flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+        </svg>
+        View Dashboard
+       </a>
+       
+       <button onclick="goToSlide(7)" class="btn btn-primary">Next Project →</button>
+      </div>
+     </div>
+    </section> <section id="slide-7" class="slide">
+     <div class="max-w-6xl mx-auto w-full flex-1 flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+      <div class="flex-1 animate-left">
+       <div class="flex gap-2 mb-4"><span class="tag">2025</span> <span class="tag tag-green">Healthcare Tech</span>
+       </div>
+       <h2 class="font-display text-3xl lg:text-4xl font-bold mb-4">CodeNews: <span class="gradient-text">Ethical Healthcare Management</span></h2>
+       <p class="text-lg opacity-80 leading-relaxed mb-6">The CodeNews project focused on developing an innovative healthcare management system to manage real-time service queues while ensuring total transparency regarding patient data collection and usage.</p>
+       <p class="opacity-70 leading-relaxed mb-6">It addressed the critical challenge of balancing administrative efficiency with legal and ethical data protection standards.</p>
+       <div class="flex flex-wrap gap-2 mb-6"><span class="px-3 py-1 rounded-full text-xs font-medium" style="background: rgba(129, 199, 132, 0.1); border: 1px solid rgba(129, 199, 132, 0.3);">Java</span> <span class="px-3 py-1 rounded-full text-xs font-medium" style="background: rgba(129, 199, 132, 0.1); border: 1px solid rgba(129, 199, 132, 0.3);">HTML/CSS</span> <span class="px-3 py-1 rounded-full text-xs font-medium" style="background: rgba(129, 199, 132, 0.1); border: 1px solid rgba(129, 199, 132, 0.3);">Figma</span> <span class="px-3 py-1 rounded-full text-xs font-medium" style="background: rgba(129, 199, 132, 0.1); border: 1px solid rgba(129, 199, 132, 0.3);">LGPD</span>
+       </div><button onclick="goToSlide(8)" class="btn btn-primary">See My Role →</button>
+      </div>
+      <div class="flex-1 w-full animate-right">
+       <div class="aspect-video max-w-lg mx-auto rounded-[12px] border-2 border-[#3a4a6c] hover:border-[#64b5f6] transition-all duration-300 overflow-hidden shadow-xl bg-white">
+        <img src="Slide 8.png" alt="Application interface preview" class="w-full h-full object-cover">
+       </div>
+      </div>
+     </div>
+    </section><section id="slide-8" class="slide">
+     <div class="max-w-6xl mx-auto w-full flex-1 flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+      <div class="flex-1 w-full lg:order-2 animate-right">
+       <div class="aspect-video max-w-lg mx-auto rounded-[12px] border-2 border-[#3a4a6c] hover:border-[#64b5f6] transition-all duration-300 overflow-hidden shadow-xl bg-[#1e1e1e]">
+        <img src="Slide 9.png" alt="Code screenshot" class="w-full h-full object-cover">
+       </div>
+      </div>
+      <div class="flex-1 lg:order-1 animate-left"><span class="tag tag-green mb-4 inline-block">CodeNews Project</span>
+       <h2 class="font-display text-3xl lg:text-4xl font-bold mb-6">My Role: <span class="gradient-text">Leader &amp; Software Developer</span></h2>
+       <div class="space-y-4">
+        <div class="timeline-item pb-4">
+         <h4 class="font-semibold mb-1" style="color: var(--accent-secondary);">Java Development</h4>
+         <p class="text-sm opacity-80">Implemented core back-end logic (OOP) focusing on robust and ethical data handling.</p>
+        </div>
+        <div class="timeline-item pb-4">
+         <h4 class="font-semibold mb-1" style="color: var(--accent-secondary);">Team Coordination</h4>
+         <p class="text-sm opacity-80">Led task division and integrated Java back-end with Front-end and HCI design.</p>
+        </div>
+        <div class="timeline-item pb-4">
+         <h4 class="font-semibold mb-1" style="color: var(--accent-secondary);">HCI &amp; Design</h4>
+         <p class="text-sm opacity-80">Created high-fidelity Figma prototypes using Nielsen's heuristics, later translated to HTML.</p>
+        </div>
+        <div class="timeline-item">
+         <h4 class="font-semibold mb-1" style="color: var(--accent-secondary);">Ethical Compliance</h4>
+         <p class="text-sm opacity-80">Mapped Data Protection (LGPD) requirements into the software's functional design.</p>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><section id="slide-9" class="slide">
+     <div class="max-w-6xl mx-auto w-full">
+      <div class="text-center mb-10 animate-left"><span class="tag mb-4 inline-block">CodeNews</span>
+       <h2 class="font-display text-3xl lg:text-4xl font-bold">Challenge &amp; <span class="gradient-text">Key Results</span></h2>
+      </div>
+      <div class="grid lg:grid-cols-2 gap-8 mb-8">
+       <div class="card animate-left">
+        <div class="flex items-center gap-3 mb-4">
+         <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: rgba(239, 83, 80, 0.15);">
+          <svg class="w-5 h-5" style="color: #ef5350;" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+          </svg>
+         </div>
+         <h3 class="font-display text-xl font-semibold">The Challenge</h3>
+        </div>
+        <p class="opacity-80 leading-relaxed">Public health management often lacks transparency, leading to patient anxiety. Our challenge was to design and code a tool that optimized clinic workflows while educating users on their data rights through an intuitive and legally compliant interface.</p>
+       </div>
+       <div class="card animate-right">
+        <div class="flex items-center gap-3 mb-4">
+         <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: rgba(129, 199, 132, 0.15);">
+          <svg class="w-5 h-5" style="color: var(--accent-secondary);" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+         </div>
+         <h3 class="font-display text-xl font-semibold">Key Results</h3>
+        </div>
+        <div class="space-y-3">
+         <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style="background: var(--accent-primary); color: white; font-size: 0.75rem; font-weight: 600;">
+           1
+          </div>
+          <div>
+           <p class="font-medium text-sm">Functional Logic</p>
+           <p class="text-xs opacity-70">Developed the initial back-end structure in Java, focusing on secure data management and queue processing.</p>
+          </div>
+         </div>
+         <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style="background: var(--accent-primary); color: white; font-size: 0.75rem; font-weight: 600;">
+           2
+          </div>
+          <div>
+           <p class="font-medium text-sm">High-Fidelity Prototypes &amp; Web Implementation</p>
+           <p class="text-xs opacity-70">Created interactive dashboards in Figma and implemented the interface using HTML, validated by the WebAIM Contrast Checker.</p>
+          </div>
+         </div>
+         <div class="flex items-start gap-3">
+          <div class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style="background: var(--accent-primary); color: white; font-size: 0.75rem; font-weight: 600;">
+           3
+          </div>
+          <div>
+           <p class="font-medium text-sm">Ethical Integration</p>
+           <p class="text-xs opacity-70">Successfully translated complex legal requirements into functional software features and user-friendly documentation.</p>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="flex justify-center gap-4"><button onclick="goToSlide(10)" class="btn btn-primary">View Results →</button>
+      </div>
+     </div>
+    </section> <section id="slide-10" class="slide">
+      <div class="max-w-6xl mx-auto w-full flex-1 flex flex-col items-center justify-center">
+        <div class="text-center mb-8 animate-left">
+          <span class="tag mb-4 inline-block">CodeNews</span>
+          <h2 class="font-display text-3xl lg:text-4xl font-bold"><span class="gradient-text">Project Code</span></h2>
+        </div>
+        
+        <div class="w-full flex flex-col items-center justify-center animate-right my-10">
+          <p class="text-lg opacity-80 mb-10 max-w-2xl text-center">
+            Visit the repositories below to explore the project's source code.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-6 w-full max-w-2xl justify-center">
+            <a href="https://drive.google.com/drive/folders/13phTanbJUb4PVDwkgh_OQF0MbpyCLdUz?usp=drive_link" target="_blank" class="btn btn-outline flex items-center justify-center gap-3 text-lg py-4 px-8 w-full sm:w-auto">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+              </svg>
+              HTML Code
+            </a>
+            
+            <a href="https://drive.google.com/drive/folders/1_Uk258vtnmPkY37N8UBumQP4Ci_dMBu2?usp=drive_link" target="_blank" class="btn btn-primary flex items-center justify-center gap-3 text-lg py-4 px-8 w-full sm:w-auto">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+              Java Code
+            </a>
+          </div>
+        </div>
+        
+        <div class="flex justify-center mt-8 gap-4">
+          <button onclick="goToSlide(11)" class="btn btn-primary">Next Experience →</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="slide-11" class="slide">
+     <div class="max-w-6xl mx-auto w-full flex-1 flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+      <div class="flex-1 animate-left">
+       <div class="flex gap-2 mb-4"><span class="tag">2025</span> <span class="tag tag-green">Leadership Development</span>
+       </div>
+       <h2 class="font-display text-3xl lg:text-4xl font-bold mb-4">Aspire Leaders <span class="gradient-text">Program</span></h2>
+       <p class="text-xs opacity-60 mb-6 font-medium" style="color: var(--accent-secondary);">Leadership &amp; Global Engagement</p>
+       <p class="text-base opacity-80 leading-relaxed mb-6">Selected for the Aspire Leaders Program (2025), a global leadership development initiative founded by Harvard faculty. The program is designed for high-potential university students who are the first in their families to attend college.</p>
+       <div class="space-y-4">
+        <div class="timeline-item pb-4">
+         <h4 class="font-semibold mb-1" style="color: var(--accent-primary);">Global Networking</h4>
+         <p class="text-sm opacity-80">Engaged with a diverse network of young leaders and mentors from around the world to discuss complex social and professional challenges.</p>
+        </div>
+        <div class="timeline-item pb-4">
+         <h4 class="font-semibold mb-1" style="color: var(--accent-primary);">Leadership Training</h4>
+         <p class="text-sm opacity-80">Participated in intensive modules focused on strategic thinking, ethical decision-making, and effective communication.</p>
+        </div>
+        <div class="timeline-item pb-4">
+         <h4 class="font-semibold mb-1" style="color: var(--accent-primary);">Problem Solving</h4>
+         <p class="text-sm opacity-80">Applied analytical thinking to develop solutions for real-world problems, aligning personal leadership with community needs.</p>
+        </div>
+        <div class="timeline-item">
+         <h4 class="font-semibold mb-1" style="color: var(--accent-primary);">Global Impact</h4>
+         <p class="text-sm opacity-80">Developed a global perspective on how technology and leadership can intersect to create social change, preparing for high-level international academic collaborations.</p>
+        </div>
+       </div>
+      </div>
+      <div class="flex-1 w-full animate-right">
+       <div class="aspect-video max-w-lg mx-auto rounded-[12px] border-2 border-[#3a4a6c] hover:border-[#64b5f6] transition-all duration-300 overflow-hidden shadow-xl bg-white">
+        <img src="Slide 12.jpeg" alt="Aspire Leaders Program Certificate" class="w-full h-full object-contain">
+       </div>
+      </div>
+     </div>    
+    </section><section id="slide-12" class="slide">
+     <div class="max-w-6xl mx-auto w-full">
+      <div class="text-center mb-10 animate-left"><span class="tag mb-4 inline-block">Expertise</span>
+       <h2 class="font-display text-3xl lg:text-4xl font-bold">Technical Skills &amp; <span class="gradient-text">Competencies</span></h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6"><div class="skill-card animate-left">
+        <h4>💻 Programming &amp; Software Development</h4>
+        <div class="skill-list mt-4">
+         <div class="skill-badge">
+          Java (OOP)
+         </div>
+         <div class="skill-badge">
+          Python
+         </div>
+         <div class="skill-badge">
+          C++
+         </div>
+         <div class="skill-badge">
+          HTML/CSS
+         </div>
+         <div class="skill-badge">
+          Logic Programming
+         </div>
+         <div class="skill-badge">
+          Algorithms
+         </div>
+        </div>
+        <p class="text-xs opacity-70 mt-4"><span style="color: var(--accent-primary);">Tools:</span> VS Code, Eclipse IDE, Figma</p>
+       </div><div class="skill-card animate-right">
+        <h4>📊 Data Analytics &amp; Business Intelligence</h4>
+        <div class="skill-list mt-4">
+         <div class="skill-badge">
+          Power BI
+         </div>
+         <div class="skill-badge">
+          Tableau
+         </div>
+         <div class="skill-badge">
+          SQL
+         </div>
+         <div class="skill-badge">
+          DAX
+         </div>
+         <div class="skill-badge">
+          Data Cleaning
+         </div>
+         <div class="skill-badge">
+          Data Storytelling
+         </div>
+        </div>
+        <p class="text-xs opacity-70 mt-4"><span style="color: var(--accent-secondary);">Focus:</span> Complex metrics &amp; actionable insights</p>
+       </div><div class="skill-card animate-left" style="animation-delay: 0.4s;">
+        <h4>🎯 Professional Competencies</h4>
+        <div class="skill-list mt-4">
+         <div class="skill-badge">
+          English (B2)
+         </div>
+         <div class="skill-badge">
+          Analytical Thinking
+         </div>
+         <div class="skill-badge">
+          Problem-Solving
+         </div>
+         <div class="skill-badge">
+          LGPD Compliance
+         </div>
+         <div class="skill-badge">
+          Ethical Standards
+         </div>
+         <div class="skill-badge">
+          Research
+         </div>
+        </div>
+        <p class="text-xs opacity-70 mt-4"><span style="color: var(--accent-secondary);">Background:</span> Responsible Tech &amp; Human-Centered Systems</p>
+       </div>
+      </div>
+      <div class="flex justify-center mt-10 gap-4"><button onclick="goToSlide(14)" class="btn btn-primary">Research Interests →</button>
+      </div>
+     </div>
+    </section><section id="slide-13" class="slide">
+     <div class="max-w-4xl mx-auto w-full flex-1 flex flex-col items-center justify-center text-center">
+      <div class="animate-left mb-12"><span class="tag mb-6 inline-block">Future Directions</span>
+      </div>
+      <h2 class="font-display text-4xl lg:text-5xl font-bold mb-10 animate-scale"><span class="gradient-text">Research Interests</span></h2>
+      <div class="grid md:grid-cols-3 gap-6 w-full mb-12">
+       <div class="card animate-left">
+        <div class="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4" style="background: rgba(100, 181, 246, 0.15);">
+         <svg class="w-6 h-6" style="color: var(--accent-primary);" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5.36 4.24l-.707-.707M5.342 17.658l.707-.707M5.63 5.343l.707.707"></path>
+         </svg>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-2">AI &amp; Machine Learning</h3>
+        <p class="text-sm opacity-70">Exploring intelligent systems and their applications in social impact</p>
+       </div>
+       <div class="card animate-right">
+        <div class="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4" style="background: rgba(129, 199, 132, 0.15);">
+         <svg class="w-6 h-6" style="color: var(--accent-secondary);" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12a3 3 0 103 3 3 3 0 00-3-3m6 0a3 3 0 103 3 3 3 0 00-3-3m6 0a3 3 0 103 3 3 3 0 00-3-3"></path>
+         </svg>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-2">Data Science</h3>
+        <p class="text-sm opacity-70">Turning complex data into actionable insights for communities</p>
+       </div>
+       <div class="card animate-left" style="animation-delay: 0.4s;">
+        <div class="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4" style="background: rgba(129, 199, 132, 0.15);">
+         <svg class="w-6 h-6" style="color: var(--accent-secondary);" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+         </svg>
+        </div>
+        <h3 class="font-display text-xl font-semibold mb-2">Human-Computer Interaction</h3>
+        <p class="text-sm opacity-70">Building ethical, accessible, and user-centered technology</p>
+       </div>
+      </div>
+      <div class="animate-right mt-8"><button onclick="goToSlide(0)" class="btn btn-outline">← Return to Cover</button>
+      </div>
+     </div>
+    </section>
+   </main><div class="fixed bottom-6 left-0 right-0 flex justify-center gap-4 z-40"><button id="prev-btn" onclick="prevSlide()" class="btn btn-outline flex items-center gap-2 opacity-50 pointer-events-none">
+     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+     </svg> Previous </button> <button id="next-btn" onclick="nextSlide()" class="btn btn-primary flex items-center gap-2"> Next 
+     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+     </svg></button>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      portfolio_title: 'Portfolio',
+      portfolio_subtitle: 'Nathalie Soares',
+      main_title: 'Academic Journey & Research',
+      main_subtitle: 'This portfolio showcases my academic and research trajectory, highlighting projects developed during research assistantships, interdisciplinary collaborations, and my current journey in Software Analysis and Development.',
+      background_color: '#0a0f1a',
+      surface_color: '#141c2e',
+      text_color: '#e8edf5',
+      accent_primary: '#64b5f6',
+      accent_secondary: '#81c784',
+      font_family: 'Source Sans 3',
+      font_size: 16
+    };
+    
+    let currentSlide = 0;
+    const totalSlides = 14;
+    
+    function updateNavigation() {
+      // Update slide counter
+      document.getElementById('slide-counter').textContent = `${currentSlide + 1} / ${totalSlides}`;
+      
+      // Update progress bar
+      document.getElementById('progress-fill').style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
+      
+      // Update nav dots
+      document.querySelectorAll('.nav-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+      });
+      
+      // Update prev/next buttons
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      
+      if (currentSlide === 0) {
+        prevBtn.classList.add('opacity-50', 'pointer-events-none');
+      } else {
+        prevBtn.classList.remove('opacity-50', 'pointer-events-none');
+      }
+      
+      if (currentSlide === totalSlides - 1) {
+        nextBtn.innerHTML = `
+          Restart
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+          </svg>
+        `;
+      } else {
+        nextBtn.innerHTML = `
+          Next
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        `;
+      }
+    }
+    
+    function goToSlide(slideNumber) {
+      if (slideNumber < 0 || slideNumber >= totalSlides) return;
+      
+      document.querySelectorAll('.slide').forEach(slide => {
+        slide.classList.remove('active');
+      });
+      
+      document.getElementById(`slide-${slideNumber}`).classList.add('active');
+      currentSlide = slideNumber;
+      updateNavigation();
+      
+      // Scroll to top
+      document.querySelector('.scroll-container').scrollTop = 0;
+    }
+    
+    function nextSlide() {
+      if (currentSlide === totalSlides - 1) {
+        goToSlide(0);
+      } else {
+        goToSlide(currentSlide + 1);
+      }
+    }
+    
+    function prevSlide() {
+      if (currentSlide > 0) {
+        goToSlide(currentSlide - 1);
+      }
+    }
+    
+    function createNavDots() {
+      const container = document.getElementById('nav-dots');
+      container.innerHTML = '';
+      for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('div');
+        dot.className = `nav-dot ${i === 0 ? 'active' : ''}`;
+        dot.onclick = () => goToSlide(i);
+        container.appendChild(dot);
+      }
+    }
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevSlide();
+      }
+    });
+    
+    async function onConfigChange(config) {
+      const portfolioTitleEl = document.getElementById('portfolio-title');
+      const portfolioSubtitleEl = document.getElementById('portfolio-subtitle');
+      const titleEl = document.getElementById('main-title');
+      const subtitleEl = document.getElementById('main-subtitle');
+      const navTitleEl = document.getElementById('nav-title');
+      
+      if (portfolioTitleEl) {
+        portfolioTitleEl.innerHTML = `<span class="gradient-text">${config.portfolio_title || defaultConfig.portfolio_title}</span>`;
+      }
+      if (portfolioSubtitleEl) {
+        portfolioSubtitleEl.textContent = config.portfolio_subtitle || defaultConfig.portfolio_subtitle;
+      }
+      if (titleEl) {
+        titleEl.innerHTML = `${config.main_title || defaultConfig.main_title}`.replace('& Research', '& <span class="gradient-text">Research</span>');
+      }
+      if (subtitleEl) {
+        subtitleEl.textContent = config.main_subtitle || defaultConfig.main_subtitle;
+      }
+      if (navTitleEl) {
+        navTitleEl.textContent = config.portfolio_title || defaultConfig.portfolio_title;
+      }
+      
+      // Apply colors
+      document.documentElement.style.setProperty('--bg-primary', config.background_color || defaultConfig.background_color);
+      document.documentElement.style.setProperty('--surface', config.surface_color || defaultConfig.surface_color);
+      document.documentElement.style.setProperty('--text-primary', config.text_color || defaultConfig.text_color);
+      document.documentElement.style.setProperty('--accent-primary', config.accent_primary || defaultConfig.accent_primary);
+      document.documentElement.style.setProperty('--accent-secondary', config.accent_secondary || defaultConfig.accent_secondary);
+      
+      document.body.style.background = config.background_color || defaultConfig.background_color;
+      document.body.style.color = config.text_color || defaultConfig.text_color;
+      
+      // Apply font
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      document.body.style.fontFamily = `'${fontFamily}', 'Source Sans 3', sans-serif`;
+      
+      // Apply font size
+      const baseSize = config.font_size || defaultConfig.font_size;
+      document.body.style.fontSize = `${baseSize}px`;
+    }
+    
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => { config.background_color = value; window.elementSdk.setConfig({ background_color: value }); }
+          },
+          {
+            get: () => config.surface_color || defaultConfig.surface_color,
+            set: (value) => { config.surface_color = value; window.elementSdk.setConfig({ surface_color: value }); }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => { config.text_color = value; window.elementSdk.setConfig({ text_color: value }); }
+          },
+          {
+            get: () => config.accent_primary || defaultConfig.accent_primary,
+            set: (value) => { config.accent_primary = value; window.elementSdk.setConfig({ accent_primary: value }); }
+          },
+          {
+            get: () => config.accent_secondary || defaultConfig.accent_secondary,
+            set: (value) => { config.accent_secondary = value; window.elementSdk.setConfig({ accent_secondary: value }); }
+          }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => config.font_family || defaultConfig.font_family,
+          set: (value) => { config.font_family = value; window.elementSdk.setConfig({ font_family: value }); }
+        },
+        fontSizeable: {
+          get: () => config.font_size || defaultConfig.font_size,
+          set: (value) => { config.font_size = value; window.elementSdk.setConfig({ font_size: value }); }
+        }
+      };
+    }
+    
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['portfolio_title', config.portfolio_title || defaultConfig.portfolio_title],
+        ['portfolio_subtitle', config.portfolio_subtitle || defaultConfig.portfolio_subtitle],
+        ['main_title', config.main_title || defaultConfig.main_title],
+        ['main_subtitle', config.main_subtitle || defaultConfig.main_subtitle]
+      ]);
+    }
+    
+    // Initialize
+    createNavDots();
+    updateNavigation();
+    
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    } else {
+      onConfigChange(defaultConfig);
+    }
+  </script>
+ </body>
+</html>
